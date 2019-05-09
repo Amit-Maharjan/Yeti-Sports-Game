@@ -490,6 +490,10 @@ function Snake(x) {
   this.imageY = 0;
 
   this.currentFrameIndex = 0;
+
+  this.topOffset = 175;
+  this.rightOffset = 50;
+  this.leftOffset = 90;
 }
 
 Snake.prototype.updateSnakeSprite = function() {
@@ -516,17 +520,22 @@ Snake.prototype.drawSnake = function() {
 
 Snake.prototype.checkCollisionSnake = function() {
   if (
-    penguin.x <= this.x + this.width &&
-    penguin.x >= this.x + this.width / 2 &&
-    penguin.y + penguin.imageHeight >= this.y
+    penguin.x <= this.x + this.width - this.rightOffset &&
+    penguin.x + penguin.imageWidth >= this.x + this.leftOffset &&
+    penguin.y + penguin.imageHeight >= this.y + this.topOffset
   ) {
-    collisionInRight();
-  } else if (
-    penguin.x <= this.x + this.width / 2 &&
-    penguin.x + penguin.imageWidth >= this.x &&
-    penguin.y + penguin.imageHeight >= this.y
-  ) {
-    collisionInLeft();
+    //Collision
+    if (xChangeOfBackground > 0) {
+      speedInPower = 50;
+      angleInDegree = 45;
+      flagForNegativeGravity = 1;
+      collisionFlag = 0;
+    } else if (xChangeOfBackground < 0) {
+      speedInPower = 50;
+      angleInDegree = 45 + 180;
+      flagForNegativeGravity = 1;
+      collisionFlag = 0;
+    }
   }
 };
 
@@ -750,6 +759,7 @@ function animatePenguinSprite() {
     if (bird.y < -50) {
       bird.y += 5;
       penguin.y += 5;
+      xChangeOfBackground = 10;
     }
 
     bird.drawBird();
@@ -758,7 +768,7 @@ function animatePenguinSprite() {
     if (count > 200) penguin.dropPenguin();
   }
 
-  if (penguin.y < 0 - penguin.imageHeight) {
+  if (penguin.y < 0 - 8 * penguin.imageHeight) {
     // collisionFlag = 2 indicated the bird action being activated
     bird.y = 0 - bird.height;
     penguin.y = 0 - penguin.imageHeight;
