@@ -14,6 +14,7 @@ let elephant = new Image();
 let giraffe = new Image();
 let snake = new Image();
 let tree = new Image();
+let birdImage = new Image();
 
 mountainImage.src = 'images/mountain-background.png';
 penguinImage.src = 'images/penguin-sprite-images.png';
@@ -21,6 +22,7 @@ elephant.src = 'images/elephant.png';
 giraffe.src = 'images/giraffe.png';
 snake.src = 'images/snake-sprite-images.png';
 tree.src = 'images/tree.png';
+birdImage.src = 'images/bird-sprite.png';
 
 //Background Class
 function Background() {
@@ -254,6 +256,17 @@ Penguin.prototype.projectilePenguinAfterCollision = function() {
   }
 };
 
+let disappearBird = 0;
+
+Penguin.prototype.dropPenguin = function() {
+  angleInRadianOfPenguin = 0;
+  speedOfPenguin = 2 * 20;
+  vxOfPenguin = speedOfPenguin;
+  vyOfPenguin = speedOfPenguin;
+  collisionFlag = 1;
+  disappearBird = 1;
+};
+
 const xPositionOfPenguin = canvas.width - 200;
 const yPositionOfPenguin = canvas.height - 200;
 
@@ -483,9 +496,6 @@ Snake.prototype.updateSnakeSprite = function() {
   this.currentFrameIndex = ++this.currentFrameIndex % this.totalSpriteImage;
   this.imageX = this.currentFrameIndex * this.imageWidth;
   this.imageY = 0;
-  ctx.clearRect(this.x, this.y, this.imageWidth, this.imageHeight);
-
-  //background.render();
 };
 
 Snake.prototype.drawSnake = function() {
@@ -547,6 +557,53 @@ function Tree(x) {
     }
   };
 }
+
+//Bird Class
+function Bird() {
+  this.totalSpriteImage = 8;
+
+  this.width = birdImage.width / this.totalSpriteImage / 1.5;
+  this.height = birdImage.height / 1.5;
+
+  this.x = xPositionOfPenguin - 100;
+  this.y = 0;
+
+  this.spriteWidth = 2520;
+  this.spriteHeight = 315;
+
+  this.imageWidth = this.spriteWidth / this.totalSpriteImage;
+  this.imageHeight = this.spriteHeight;
+
+  this.imageX = 0;
+  this.imageY = 0;
+
+  this.currentFrameIndex = 0;
+}
+
+Bird.prototype.updateBirdSprite = function() {
+  this.currentFrameIndex = ++this.currentFrameIndex % this.totalSpriteImage;
+  this.imageX = this.currentFrameIndex * this.imageWidth;
+  this.imageY = 0;
+};
+
+Bird.prototype.drawBird = function() {
+  if (moveBackground === 1) this.updateBirdSprite();
+
+  ctx.drawImage(
+    birdImage,
+    this.imageX,
+    this.imageY,
+    this.imageWidth,
+    this.imageHeight,
+    this.x,
+    this.y,
+    this.width,
+    this.height
+  );
+};
+
+//bird Object
+let bird = new Bird();
 
 /*
   0 - Elephant
@@ -649,6 +706,7 @@ function displayScore() {
 
 let animationNumber = 1;
 let collisionFlag = 0;
+let count;
 
 function animateAngle() {
   background.render();
@@ -678,10 +736,35 @@ function animatePower() {
 }
 
 function animatePenguinSprite() {
-  if (collisionFlag === 0) penguin.projectilePenguin();
-  else if (collisionFlag === 1) penguin.projectilePenguinAfterCollision();
-
   penguin.drawPenguin();
+
+  if (collisionFlag === 0) penguin.projectilePenguin();
+  else if (collisionFlag === 1) {
+    penguin.projectilePenguinAfterCollision();
+    if (disappearBird === 1) {
+      bird.y -= 5;
+      bird.drawBird();
+    }
+  } else if (collisionFlag === 2) {
+    // collisionFlag = 2 indicated the bird action being activated
+    if (bird.y < -50) {
+      bird.y += 5;
+      penguin.y += 5;
+    }
+
+    bird.drawBird();
+    count++;
+
+    if (count > 200) penguin.dropPenguin();
+  }
+
+  if (penguin.y < 0 - penguin.imageHeight) {
+    // collisionFlag = 2 indicated the bird action being activated
+    bird.y = 0 - bird.height;
+    penguin.y = 0 - penguin.imageHeight;
+    count = 0;
+    collisionFlag = 2;
+  }
 
   displayScore();
 
