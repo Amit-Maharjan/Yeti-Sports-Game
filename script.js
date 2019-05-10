@@ -236,7 +236,7 @@ Penguin.prototype.projectilePenguinAfterCollision = function() {
 
   //Bouncing Effect and Friction of Penguin
   if (this.y > yPositionOfPenguin && t > 0) {
-    if (speedOfPenguin >= 1 * 20) {
+    if (speedOfPenguin >= 20) {
       //Bounce
       speedOfPenguin = speedOfPenguin / 5;
       vxOfPenguin = speedOfPenguin;
@@ -244,7 +244,7 @@ Penguin.prototype.projectilePenguinAfterCollision = function() {
       angleInRadianOfPenguin = (45 * Math.PI) / 180;
       moveBackground = 1;
       this.y = yPositionOfPenguin;
-    } else if (speedOfPenguin > 0.5 * 20 && speedOfPenguin < 1 * 20) {
+    } else if (speedOfPenguin > 10 && speedOfPenguin < 20) {
       //Friction
       speedOfPenguin -= 1;
       vxOfPenguin = speedOfPenguin;
@@ -260,7 +260,8 @@ let disappearBird = 0;
 
 Penguin.prototype.dropPenguin = function() {
   angleInRadianOfPenguin = 0;
-  speedOfPenguin = 2 * 20;
+  speedOfPenguin = 40;
+  speedInPower = 30;
   vxOfPenguin = speedOfPenguin;
   vyOfPenguin = speedOfPenguin;
   collisionFlag = 1;
@@ -342,6 +343,9 @@ function Angle() {
     that.angle = that.measureX - (that.x - that.radius1);
     angleInDegree = that.angle;
     animationNumber = 2;
+    document
+      .getElementById('canvas')
+      .removeEventListener('click', angle.setAngle);
   };
 
   this.drawLine = function() {
@@ -410,6 +414,9 @@ function Power() {
   this.setPower = function() {
     speedInPower = that.measureHeight;
     animationNumber = 3;
+    document
+      .getElementById('canvas')
+      .removeEventListener('click', power.setPower);
   };
 }
 
@@ -421,11 +428,11 @@ function Elephant(x) {
   this.x = x;
   this.y = yPositionOfPenguin + penguin.imageHeight - elephant.height;
 
-  this.drawElephant = function() {
+  this.draw = function() {
     ctx.drawImage(elephant, this.x, this.y);
   };
 
-  this.checkCollisionElephant = function() {
+  this.checkCollision = function() {
     if (
       penguin.x <= this.x + elephant.width &&
       penguin.x >= this.x + elephant.width / 2 &&
@@ -452,11 +459,11 @@ function Giraffe(x) {
   this.legHeight = 205;
   this.tailWidth = 100;
 
-  this.drawGiraffe = function() {
+  this.draw = function() {
     ctx.drawImage(giraffe, this.x, this.y, this.width, this.height);
   };
 
-  this.checkCollisionGiraffe = function() {
+  this.checkCollision = function() {
     if (
       penguin.x <= this.x + this.width &&
       penguin.x >= this.x + this.width / 2 &&
@@ -509,7 +516,7 @@ Snake.prototype.updateSnakeSprite = function() {
 
 let moveSnake = 0;
 
-Snake.prototype.drawSnake = function() {
+Snake.prototype.draw = function() {
   if (this.currentFrameIndex === 5) moveSnake = 0;
 
   if (moveSnake === 1) this.updateSnakeSprite();
@@ -527,7 +534,7 @@ Snake.prototype.drawSnake = function() {
   );
 };
 
-Snake.prototype.checkCollisionSnake = function() {
+Snake.prototype.checkCollision = function() {
   if (
     penguin.x <= this.x + this.width - this.rightOffset &&
     penguin.x + penguin.imageWidth >= this.x + this.leftOffset &&
@@ -535,7 +542,7 @@ Snake.prototype.checkCollisionSnake = function() {
   ) {
     //Collision
     if (xChangeOfBackground > 0) angleInDegree = 45;
-    else if (xChangeOfBackground < 0) angleInDegree = 45 + 180;
+    else if (xChangeOfBackground < 0) angleInDegree = 135;
 
     speedInPower = 50;
     flagForNegativeGravity = 1;
@@ -551,11 +558,11 @@ function Tree(x) {
   this.x = x;
   this.y = yPositionOfPenguin + penguin.imageHeight - this.height;
 
-  this.drawTree = function() {
+  this.draw = function() {
     ctx.drawImage(tree, this.x, this.y, this.width, this.height);
   };
 
-  this.checkCollisionTree = function() {
+  this.checkCollision = function() {
     if (
       penguin.x <= this.x + this.width &&
       penguin.x >= this.x + this.width / 2 &&
@@ -649,12 +656,9 @@ else if (randomAnimal === 3)
   animalArray[0] = new Tree(initialXPositionOfAnimal);
 
 function drawAllAnimal() {
-  for (let i = 0; i < animalArray.length; i++) {
-    if (animalArray[i] instanceof Elephant) animalArray[i].drawElephant();
-    else if (animalArray[i] instanceof Giraffe) animalArray[i].drawGiraffe();
-    else if (animalArray[i] instanceof Snake) animalArray[i].drawSnake();
-    else if (animalArray[i] instanceof Tree) animalArray[i].drawTree();
-  }
+  animalArray.forEach(animal => {
+    animal.draw();
+  });
 }
 
 function updateAnimal() {
@@ -680,16 +684,9 @@ function updateAnimal() {
 }
 
 function checkCollision() {
-  for (let i = 0; i < animalArray.length; i++) {
-    if (animalArray[i] instanceof Elephant)
-      animalArray[i].checkCollisionElephant();
-    else if (animalArray[i] instanceof Giraffe)
-      animalArray[i].checkCollisionGiraffe();
-    else if (animalArray[i] instanceof Snake)
-      animalArray[i].checkCollisionSnake();
-    else if (animalArray[i] instanceof Tree)
-      animalArray[i].checkCollisionTree();
-  }
+  animalArray.forEach(animal => {
+    animal.checkCollision();
+  });
 }
 
 function collisionInRight() {
@@ -732,6 +729,8 @@ function animateAngle() {
   displayScore();
 
   drawAllAnimal();
+
+  collisionFlag = 0;
 }
 
 function animatePower() {
@@ -742,6 +741,7 @@ function animatePower() {
   power.drawRectangle();
   power.drawSmallRectangle();
   power.drawPowerMeasure();
+
   document.getElementById('canvas').addEventListener('click', power.setPower);
 
   displayScore();
@@ -773,7 +773,7 @@ function animatePenguinSprite() {
     if (count > 200) penguin.dropPenguin();
   }
 
-  if (penguin.y < 0 - 8 * penguin.imageHeight) {
+  if (penguin.y < -8 * penguin.imageHeight) {
     // collisionFlag = 2 indicated the bird action being activated
     bird.y = 0 - bird.height;
     penguin.y = 0 - penguin.imageHeight;
@@ -789,7 +789,9 @@ function animatePenguinSprite() {
 
   //Reload Game
   if (moveBackground === 0) {
-    location.reload();
+    xChangeOfBackground = 0;
+    animationNumber = 1;
+    penguin.y = yPositionOfPenguin;
   }
 }
 
