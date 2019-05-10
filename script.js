@@ -449,6 +449,9 @@ function Giraffe(x) {
   this.x = x;
   this.y = yPositionOfPenguin + penguin.imageHeight - this.height;
 
+  this.legHeight = 205;
+  this.tailWidth = 100;
+
   this.drawGiraffe = function() {
     ctx.drawImage(giraffe, this.x, this.y, this.width, this.height);
   };
@@ -457,13 +460,15 @@ function Giraffe(x) {
     if (
       penguin.x <= this.x + this.width &&
       penguin.x >= this.x + this.width / 2 &&
-      penguin.y + penguin.imageHeight >= this.y
+      penguin.y + penguin.imageHeight >= this.y &&
+      penguin.y <= this.y + this.height - this.legHeight
     ) {
       collisionInRight();
     } else if (
       penguin.x <= this.x + this.width / 2 &&
-      penguin.x + penguin.imageWidth >= this.x &&
-      penguin.y + penguin.imageHeight >= this.y
+      penguin.x + penguin.imageWidth >= this.x + this.tailWidth &&
+      penguin.y + penguin.imageHeight >= this.y &&
+      penguin.y <= this.y + this.height - this.legHeight
     ) {
       collisionInLeft();
     }
@@ -502,8 +507,12 @@ Snake.prototype.updateSnakeSprite = function() {
   this.imageY = 0;
 };
 
+let moveSnake = 0;
+
 Snake.prototype.drawSnake = function() {
-  //if (moveBackground === 1) this.updateSnakeSprite();
+  if (this.currentFrameIndex === 5) moveSnake = 0;
+
+  if (moveSnake === 1) this.updateSnakeSprite();
 
   ctx.drawImage(
     snake,
@@ -525,17 +534,13 @@ Snake.prototype.checkCollisionSnake = function() {
     penguin.y + penguin.imageHeight >= this.y + this.topOffset
   ) {
     //Collision
-    if (xChangeOfBackground > 0) {
-      speedInPower = 50;
-      angleInDegree = 45;
-      flagForNegativeGravity = 1;
-      collisionFlag = 0;
-    } else if (xChangeOfBackground < 0) {
-      speedInPower = 50;
-      angleInDegree = 45 + 180;
-      flagForNegativeGravity = 1;
-      collisionFlag = 0;
-    }
+    if (xChangeOfBackground > 0) angleInDegree = 45;
+    else if (xChangeOfBackground < 0) angleInDegree = 45 + 180;
+
+    speedInPower = 50;
+    flagForNegativeGravity = 1;
+    collisionFlag = 0;
+    moveSnake = 1;
   }
 };
 
@@ -781,6 +786,11 @@ function animatePenguinSprite() {
   drawAllAnimal();
   checkCollision();
   updateAnimal();
+
+  //Reload Game
+  if (moveBackground === 0) {
+    location.reload();
+  }
 }
 
 let mainProgram = setInterval(function() {
