@@ -6,7 +6,7 @@ canvas.height = 684;
 let ctx = canvas.getContext('2d');
 
 let score = 0;
-let lives = 1;
+let lives = 5;
 
 //Images
 let mountainImage = new Image();
@@ -822,6 +822,20 @@ function gameOver() {
 
   crane.drawCrane();
   displayGameOver();
+
+  if (crane.x < 300) {
+    document.getElementById('canvas').addEventListener('click', reload);
+  }
+}
+
+function reload() {
+  let x = event.clientX;
+  let y = event.clientY;
+  if (x >= 560 && x <= 715 && (y >= 545 && y <= 590)) {
+    location.reload();
+  }
+
+  document.getElementById('canvas').removeEventListener('click', reload);
 }
 
 let animationNumber = 1;
