@@ -17,6 +17,8 @@ let snake = new Image();
 let tree = new Image();
 let birdImage = new Image();
 let craneImage = new Image();
+let firstYeti = new Image();
+let secondYeti = new Image();
 
 mountainImage.src = 'images/mountain-background.png';
 penguinImage.src = 'images/penguin-sprite-images.png';
@@ -26,6 +28,8 @@ snake.src = 'images/snake-sprite-images.png';
 tree.src = 'images/tree.png';
 birdImage.src = 'images/bird-sprite.png';
 craneImage.src = 'images/crane-sprite.png';
+firstYeti.src = 'images/yeti1.png';
+secondYeti.src = 'images/yeti2.png';
 
 //Background Class
 function Background() {
@@ -675,6 +679,19 @@ Crane.prototype.drawCrane = function() {
 //crane Object
 let crane = new Crane();
 
+//Yeti Class
+function Yeti(yetiImage) {
+  this.width = yetiImage.width * 2.5;
+  this.height = yetiImage.height * 2.5;
+
+  this.x = xPositionOfPenguin + 50;
+  this.y = yPositionOfPenguin + penguin.imageHeight - this.height;
+
+  this.draw = function() {
+    ctx.drawImage(yetiImage, this.x, this.y, this.width, this.height);
+  };
+}
+
 /*
   0 - Elephant
   1 - Giraffe
@@ -854,12 +871,20 @@ function animateAngle() {
 
   drawAllAnimal();
 
+  let yeti1 = new Yeti(firstYeti);
+  yeti1.draw();
+
   collisionFlag = 0;
 }
 
 function animatePower() {
   background.render();
   penguin.drawPenguin();
+
+  let yeti1 = new Yeti(firstYeti);
+  yeti1.draw();
+  yeti2.x = yeti1.x;
+
   angle.drawCircle();
   angle.drawLine();
   power.drawRectangle();
@@ -874,8 +899,13 @@ function animatePower() {
   drawAllAnimal();
 }
 
+let yeti2 = new Yeti(secondYeti);
+
 function animatePenguinSprite() {
   penguin.drawPenguin();
+
+  yeti2.x += xChangeOfBackground;
+  yeti2.draw();
 
   if (collisionFlag === 0) penguin.projectilePenguin();
   else if (collisionFlag === 1) {
@@ -895,7 +925,7 @@ function animatePenguinSprite() {
     bird.drawBird();
     count++;
 
-    if (count > 200) penguin.dropPenguin();
+    if (count > 250) penguin.dropPenguin();
   }
 
   if (penguin.y < -8 * penguin.imageHeight) {
