@@ -6,7 +6,7 @@ canvas.height = 684;
 let ctx = canvas.getContext('2d');
 
 let score = 0;
-let lives = 5;
+let lives = 1;
 
 //Images
 let mountainImage = new Image();
@@ -16,6 +16,7 @@ let giraffe = new Image();
 let snake = new Image();
 let tree = new Image();
 let birdImage = new Image();
+let craneImage = new Image();
 
 mountainImage.src = 'images/mountain-background.png';
 penguinImage.src = 'images/penguin-sprite-images.png';
@@ -24,6 +25,7 @@ giraffe.src = 'images/giraffe.png';
 snake.src = 'images/snake-sprite-images.png';
 tree.src = 'images/tree.png';
 birdImage.src = 'images/bird-sprite.png';
+craneImage.src = 'images/crane-sprite.png';
 
 //Background Class
 function Background() {
@@ -93,12 +95,13 @@ Penguin.prototype.updateSprite = function() {
   this.imageX = this.currentFrameIndex * this.imageWidth;
   this.imageY = 0;
   ctx.clearRect(this.x, this.y, this.imageWidth, this.imageHeight);
-
-  background.render();
 };
 
 Penguin.prototype.drawPenguin = function() {
   if (moveBackground === 1) this.updateSprite();
+  else if (moveBackground === 0) xChangeOfBackground = 0;
+
+  background.render();
 
   ctx.drawImage(
     penguinImage,
@@ -627,6 +630,51 @@ Bird.prototype.drawBird = function() {
 //bird Object
 let bird = new Bird();
 
+//Crane Class
+function Crane() {
+  this.totalSpriteImage = 6;
+
+  this.width = craneImage.width / this.totalSpriteImage / 1.5;
+  this.height = craneImage.height / 1.5;
+
+  this.x = canvas.width;
+  this.y = yPositionOfPenguin + penguin.imageHeight - this.height;
+
+  this.spriteWidth = 1392;
+  this.spriteHeight = 247;
+
+  this.imageWidth = this.spriteWidth / this.totalSpriteImage;
+  this.imageHeight = this.spriteHeight;
+
+  this.imageX = 0;
+  this.imageY = 0;
+
+  this.currentFrameIndex = 0;
+}
+
+Crane.prototype.updateCraneSprite = function() {
+  this.currentFrameIndex = ++this.currentFrameIndex % this.totalSpriteImage;
+  this.imageX = this.currentFrameIndex * this.imageWidth;
+  this.imageY = 0;
+};
+
+Crane.prototype.drawCrane = function() {
+  ctx.drawImage(
+    craneImage,
+    this.imageX,
+    this.imageY,
+    this.imageWidth,
+    this.imageHeight,
+    this.x,
+    this.y,
+    this.width,
+    this.height
+  );
+};
+
+//crane Object
+let crane = new Crane();
+
 /*
   0 - Elephant
   1 - Giraffe
@@ -671,14 +719,13 @@ function updateAnimal() {
       if (animalArray[animalArray.length - 1].x > 650) {
         randomAnimal = getRandomInt(0, 4);
 
-        if (randomAnimal === 0)
-          animalArray.push(new Elephant(0 - elephant.width));
+        if (randomAnimal === 0) animalArray.push(new Elephant(-elephant.width));
         else if (randomAnimal === 1)
-          animalArray.push(new Giraffe(0 - giraffe.width / 1.5));
+          animalArray.push(new Giraffe(-giraffe.width / 1.5));
         else if (randomAnimal === 2)
-          animalArray.push(new Snake(0 - snake.width / 6 / 1.5));
+          animalArray.push(new Snake(-snake.width / 6 / 1.5));
         else if (randomAnimal === 3)
-          animalArray.push(new Tree(0 - tree.width * 1.5));
+          animalArray.push(new Tree(-tree.width * 1.5));
       }
     }
   }
@@ -720,6 +767,14 @@ function displayLives() {
   ctx.font = '30px arial';
   ctx.fillStyle = 'Black';
   ctx.fillText('Lives : ' + lives, 10, 50);
+}
+
+function gameOver() {
+  if (crane.x >= 300) {
+    crane.x -= 5;
+    crane.updateCraneSprite();
+  }
+  crane.drawCrane();
 }
 
 let animationNumber = 1;
@@ -784,8 +839,8 @@ function animatePenguinSprite() {
 
   if (penguin.y < -8 * penguin.imageHeight) {
     // collisionFlag = 2 indicated the bird action being activated
-    bird.y = 0 - bird.height;
-    penguin.y = 0 - penguin.imageHeight;
+    bird.y = -bird.height;
+    penguin.y = -penguin.imageHeight;
     count = 0;
     collisionFlag = 2;
   }
@@ -806,6 +861,8 @@ function animatePenguinSprite() {
     }
 
     if (lives > 0) lives--;
+
+    if (lives === 0) gameOver();
   }
 }
 
