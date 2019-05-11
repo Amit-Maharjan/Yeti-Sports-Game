@@ -6,6 +6,7 @@ canvas.height = 684;
 let ctx = canvas.getContext('2d');
 
 let score = 0;
+let lives = 5;
 
 //Images
 let mountainImage = new Image();
@@ -715,6 +716,12 @@ function displayScore() {
   ctx.fillText('score : ' + Math.ceil(score / 100), 10, canvas.height - 20);
 }
 
+function displayLives() {
+  ctx.font = '30px arial';
+  ctx.fillStyle = 'Black';
+  ctx.fillText('Lives : ' + lives, 10, 50);
+}
+
 let animationNumber = 1;
 let collisionFlag = 0;
 let count;
@@ -727,6 +734,7 @@ function animateAngle() {
   document.getElementById('canvas').addEventListener('click', angle.setAngle);
 
   displayScore();
+  displayLives();
 
   drawAllAnimal();
 
@@ -745,6 +753,7 @@ function animatePower() {
   document.getElementById('canvas').addEventListener('click', power.setPower);
 
   displayScore();
+  displayLives();
 
   drawAllAnimal();
 }
@@ -782,6 +791,7 @@ function animatePenguinSprite() {
   }
 
   displayScore();
+  displayLives();
 
   drawAllAnimal();
   checkCollision();
@@ -789,9 +799,13 @@ function animatePenguinSprite() {
 
   //Reload Game
   if (moveBackground === 0) {
-    xChangeOfBackground = 0;
-    animationNumber = 1;
-    penguin.y = yPositionOfPenguin;
+    if (lives > 1) {
+      xChangeOfBackground = 0;
+      animationNumber = 1;
+      penguin.y = yPositionOfPenguin;
+    }
+
+    if (lives > 0) lives--;
   }
 }
 
