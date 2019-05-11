@@ -1,0 +1,21 @@
+let mountainImage = new Image();
+let penguinImage = new Image();
+let elephant = new Image();
+let giraffe = new Image();
+let snake = new Image();
+let tree = new Image();
+let birdImage = new Image();
+let craneImage = new Image();
+let firstYeti = new Image();
+let secondYeti = new Image();
+
+mountainImage.src = 'images/mountain-background.png';
+penguinImage.src = 'images/penguin-sprite-images.png';
+elephant.src = 'images/elephant.png';
+giraffe.src = 'images/giraffe.png';
+snake.src = 'images/snake-sprite-images.png';
+tree.src = 'images/tree.png';
+birdImage.src = 'images/bird-sprite.png';
+craneImage.src = 'images/crane-sprite.png';
+firstYeti.src = 'images/yeti1.png';
+secondYeti.src = 'images/yeti2.png';
