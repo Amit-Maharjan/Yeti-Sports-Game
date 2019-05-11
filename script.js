@@ -375,7 +375,7 @@ function Power() {
 
   this.width = 50;
   this.height = 100;
-  this.x = xPositionOfPenguin + penguin.imageWidth;
+  this.x = xPositionOfPenguin - angle.radius1 - this.width - 10;
   this.y = yPositionOfPenguin + penguin.imageHeight - this.height;
 
   this.measureWidth = this.width;
