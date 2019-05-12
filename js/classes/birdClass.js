@@ -17,26 +17,26 @@ function Bird() {
   this.imageY = 0;
 
   this.currentFrameIndex = 0;
+
+  this.updateBirdSprite = function() {
+    this.currentFrameIndex = ++this.currentFrameIndex % this.totalSpriteImage;
+    this.imageX = this.currentFrameIndex * this.imageWidth;
+    this.imageY = 0;
+  };
+
+  this.drawBird = function() {
+    if (moveBackground === 1) this.updateBirdSprite();
+
+    ctx.drawImage(
+      birdImage,
+      this.imageX,
+      this.imageY,
+      this.imageWidth,
+      this.imageHeight,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    );
+  };
 }
-
-Bird.prototype.updateBirdSprite = function() {
-  this.currentFrameIndex = ++this.currentFrameIndex % this.totalSpriteImage;
-  this.imageX = this.currentFrameIndex * this.imageWidth;
-  this.imageY = 0;
-};
-
-Bird.prototype.drawBird = function() {
-  if (moveBackground === 1) this.updateBirdSprite();
-
-  ctx.drawImage(
-    birdImage,
-    this.imageX,
-    this.imageY,
-    this.imageWidth,
-    this.imageHeight,
-    this.x,
-    this.y,
-    this.width,
-    this.height
-  );
-};

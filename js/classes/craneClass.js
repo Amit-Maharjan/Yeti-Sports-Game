@@ -17,24 +17,24 @@ function Crane() {
   this.imageY = 0;
 
   this.currentFrameIndex = 0;
+
+  this.updateCraneSprite = function() {
+    this.currentFrameIndex = ++this.currentFrameIndex % this.totalSpriteImage;
+    this.imageX = this.currentFrameIndex * this.imageWidth;
+    this.imageY = 0;
+  };
+
+  this.drawCrane = function() {
+    ctx.drawImage(
+      craneImage,
+      this.imageX,
+      this.imageY,
+      this.imageWidth,
+      this.imageHeight,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    );
+  };
 }
-
-Crane.prototype.updateCraneSprite = function() {
-  this.currentFrameIndex = ++this.currentFrameIndex % this.totalSpriteImage;
-  this.imageX = this.currentFrameIndex * this.imageWidth;
-  this.imageY = 0;
-};
-
-Crane.prototype.drawCrane = function() {
-  ctx.drawImage(
-    craneImage,
-    this.imageX,
-    this.imageY,
-    this.imageWidth,
-    this.imageHeight,
-    this.x,
-    this.y,
-    this.width,
-    this.height
-  );
-};

@@ -1,14 +1,11 @@
 function animateAngle() {
-  if(readyFlyMusicFlag === 0){
+  if (readyFlyMusicFlag === 0) {
     readyMusic.play();
     readyFlyMusicFlag = 1;
   }
 
   background.render();
   penguin.drawPenguin();
-  angle.drawCircle();
-  angle.drawAngleMeasure();
-  document.getElementById('canvas').addEventListener('click', angle.setAngle);
 
   displayScore();
   displayLives();
@@ -18,6 +15,10 @@ function animateAngle() {
   //yeti1 Object
   let yeti1 = new Yeti(firstYeti);
   yeti1.draw();
+
+  angle.drawCircle();
+  angle.drawAngleMeasure();
+  document.getElementById('canvas').addEventListener('click', angle.setAngle);
 
   collisionFlag = 0;
 }
@@ -31,22 +32,21 @@ function animatePower() {
   yeti1.draw();
   yeti2.x = yeti1.x;
 
+  displayScore();
+  displayLives();
+
+  drawAllAnimal();
+
   angle.drawCircle();
   angle.drawLine();
   power.drawRectangle();
   power.drawSmallRectangle();
   power.drawPowerMeasure();
-
   document.getElementById('canvas').addEventListener('click', power.setPower);
-
-  displayScore();
-  displayLives();
-
-  drawAllAnimal();
 }
 
 function animatePenguinSprite() {
-  if(readyFlyMusicFlag === 1){
+  if (readyFlyMusicFlag === 1) {
     flyMusic.play();
     readyFlyMusicFlag = 0;
   }

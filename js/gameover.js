@@ -1,5 +1,5 @@
 function gameOver() {
-  if (gameOverMusicFlag === 1){
+  if (gameOverMusicFlag === 1) {
     gameOverMusic.play();
     gameOverMusicFlag = 0;
   }
