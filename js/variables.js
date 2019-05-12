@@ -1,3 +1,5 @@
+let firstPage = document.getElementById('first-page');
+
 let canvas = document.getElementById('canvas');
 
 canvas.width = 1216;

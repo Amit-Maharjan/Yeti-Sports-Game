@@ -18,13 +18,16 @@ function getRandomInt(min, max) {
 let animalArray = [];
 let randomAnimal = getRandomInt(0, 4);
 
-if (randomAnimal === 0) animalArray[0] = new Elephant(initialXPositionOfAnimal);
-else if (randomAnimal === 1)
-  animalArray[0] = new Giraffe(initialXPositionOfAnimal);
-else if (randomAnimal === 2)
-  animalArray[0] = new Snake(initialXPositionOfAnimal);
-else if (randomAnimal === 3)
-  animalArray[0] = new Tree(initialXPositionOfAnimal);
+function initAnimal() {
+  if (randomAnimal === 0)
+    animalArray[0] = new Elephant(initialXPositionOfAnimal);
+  else if (randomAnimal === 1)
+    animalArray[0] = new Giraffe(initialXPositionOfAnimal);
+  else if (randomAnimal === 2)
+    animalArray[0] = new Snake(initialXPositionOfAnimal);
+  else if (randomAnimal === 3)
+    animalArray[0] = new Tree(initialXPositionOfAnimal);
+}
 
 function drawAllAnimal() {
   animalArray.forEach(animal => {

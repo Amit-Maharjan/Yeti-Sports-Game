@@ -18,7 +18,7 @@ function reload() {
   let y = event.clientY;
   if (x >= 560 && x <= 715 && (y >= 545 && y <= 590)) {
     location.reload();
+    //mainProgram();
+    document.getElementById('canvas').removeEventListener('click', reload);
   }
-
-  document.getElementById('canvas').removeEventListener('click', reload);
 }

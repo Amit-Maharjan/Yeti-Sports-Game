@@ -4,4 +4,10 @@
 
 #canvas {
   border: 1px solid black;
+  display: none;
+}
+
+#first-page {
+  width: 1216px;
+  height: 684px;
 }

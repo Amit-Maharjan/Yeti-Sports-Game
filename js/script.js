@@ -96,8 +96,14 @@ function animatePenguinSprite() {
   }
 }
 
-let mainProgram = setInterval(function() {
-  if (animationNumber === 1) animateAngle();
-  else if (animationNumber === 2) animatePower();
-  else if (animationNumber === 3) animatePenguinSprite();
-}, 1000 / 60);
+firstPage.addEventListener('click', startGame);
+
+function mainProgram() {
+  initAnimal();
+
+  setInterval(function() {
+    if (animationNumber === 1) animateAngle();
+    else if (animationNumber === 2) animatePower();
+    else if (animationNumber === 3) animatePenguinSprite();
+  }, 1000 / 60);
+}
