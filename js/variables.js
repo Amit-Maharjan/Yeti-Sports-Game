@@ -23,6 +23,8 @@ let moveSnake = 0;
 let animationNumber = 1;
 let collisionFlag = 0;
 let count;
+let readyFlyMusicFlag = 0;
+let gameOverMusicFlag = 1;
 
 const xPositionOfPenguin = canvas.width - 200;
 const yPositionOfPenguin = canvas.height - 200;

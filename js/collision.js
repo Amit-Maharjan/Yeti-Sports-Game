@@ -6,6 +6,8 @@ function collisionInRight() {
   angleInRadianOfPenguin = (180 * Math.PI) / 180;
 
   collisionFlag = 1;
+
+  collisionMusic.play();
 }
 
 function collisionInLeft() {
@@ -16,4 +18,6 @@ function collisionInLeft() {
   angleInRadianOfPenguin = (0 * Math.PI) / 180;
 
   collisionFlag = 1;
+
+  collisionMusic.play();
 }

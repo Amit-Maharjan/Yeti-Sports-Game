@@ -1,4 +1,9 @@
 function gameOver() {
+  if (gameOverMusicFlag === 1){
+    gameOverMusic.play();
+    gameOverMusicFlag = 0;
+  }
+
   if (crane.x >= 300) {
     crane.x -= 5;
     xDecrementOfGameOver += 5;

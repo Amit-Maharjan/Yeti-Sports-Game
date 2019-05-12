@@ -57,6 +57,7 @@ Snake.prototype.checkCollision = function() {
     if (xChangeOfBackground > 0) angleInDegree = 45;
     else if (xChangeOfBackground < 0) angleInDegree = 135;
 
+    flyMusic.play();
     speedInPower = 50;
     flagForNegativeGravity = 1;
     collisionFlag = 0;

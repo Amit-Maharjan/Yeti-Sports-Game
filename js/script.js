@@ -1,4 +1,9 @@
 function animateAngle() {
+  if(readyFlyMusicFlag === 0){
+    readyMusic.play();
+    readyFlyMusicFlag = 1;
+  }
+
   background.render();
   penguin.drawPenguin();
   angle.drawCircle();
@@ -41,6 +46,11 @@ function animatePower() {
 }
 
 function animatePenguinSprite() {
+  if(readyFlyMusicFlag === 1){
+    flyMusic.play();
+    readyFlyMusicFlag = 0;
+  }
+
   penguin.drawPenguin();
 
   yeti2.x += xChangeOfBackground;
@@ -55,6 +65,8 @@ function animatePenguinSprite() {
     }
   } else if (collisionFlag === 2) {
     // collisionFlag = 2 indicated the bird action being activated
+    birdFly.play();
+
     if (bird.y < -50) {
       bird.y += 5;
       penguin.y += 5;
@@ -96,6 +108,7 @@ function animatePenguinSprite() {
   }
 }
 
+titleMusic.play();
 firstPage.addEventListener('click', startGame);
 
 function mainProgram() {

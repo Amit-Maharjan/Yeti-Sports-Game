@@ -7,5 +7,6 @@ function startGame() {
 
     mainProgram();
     firstPage.removeEventListener('click', startGame);
+    titleMusic.pause();
   }
 }
